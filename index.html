@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دليل الصلاة التعليمي</title>
+    <style>
+      :root {
+        --primary: #065f46;
+        --accent: #d4af37;
+        --bg: #faf9f6;
+        --border: #e2e8f0;
+      }
+
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background-color: var(--bg);
+        color: #333;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      header {
+        text-align: center;
+        padding: 50px 20px;
+        background: var(--primary);
+        color: white;
+      }
+
+      .container {
+        max-width: 800px; /* عرض ضيق للتركيز */
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* حاوية الـ 3D */
+      .model-container {
+        margin: -40px auto 40px;
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border);
+      }
+
+      .sketchfab-embed-wrapper {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+      }
+
+      .sketchfab-embed-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* ستايل الخطوات (قائمة بسيطة) */
+      .section-header {
+        color: var(--primary);
+        border-bottom: 2px solid var(--accent);
+        display: inline-block;
+        margin: 40px 0 20px;
+        padding-bottom: 5px;
+      }
+
+      .step-item {
+        background: white;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border: 1px solid var(--border);
+        transition: 0.3s;
+      }
+
+      .step-item:hover {
+        border-color: var(--primary);
+      }
+
+      .step-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        object-fit: cover;
+        margin-left: 20px;
+        background: #eee;
+      }
+
+      .step-text {
+        flex: 1;
+      }
+
+      .step-title {
+        margin: 0 0 5px;
+        font-size: 1.1rem;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+      }
+
+      .step-number {
+        font-size: 0.8rem;
+        background: var(--accent);
+        color: var(--primary);
+        padding: 2px 8px;
+        border-radius: 5px;
+        margin-left: 10px;
+      }
+
+      .step-desc {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #555;
+      }
+
+      footer {
+        text-align: center;
+        padding: 40px;
+        color: #888;
+      }
+
+      @media (max-width: 600px) {
+        .step-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .step-img {
+          width: 100%;
+          height: 180px;
+          margin: 0 0 15px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>مصباح الصلاة</h1>
+    </header>
+
+    <div class="container">
+      <div class="model-container">
+        <div class="sketchfab-embed-wrapper">
+          <iframe
+            title="MUSLIM PRAYER ISLAM SALAH"
+            frameborder="0"
+            allowfullscreen
+            src="https://sketchfab.com/models/eb0f80a7278243b4988b159fc957bbd5/embed"
+          >
+          </iframe>
+        </div>
+      </div>
+
+      <div id="steps-list"></div>
+    </div>
+
+    <footer>&copy; 2026 دليل تعليم الصلاة</footer>
+
+    <script>
+      async function loadData() {
+        try {
+          const response = await fetch("package.json");
+          const data = await response.json();
+          const container = document.getElementById("steps-list");
+
+          data.prayer_app_data.sections.forEach((section) => {
+            // إضافة عنوان القسم
+            const h2 = document.createElement("h2");
+            h2.className = "section-header";
+            h2.textContent = section.section_title;
+            container.appendChild(h2);
+
+            // إضافة الخطوات كقائمة بسيطة
+            section.content.forEach((item) => {
+              const stepDiv = document.createElement("div");
+              stepDiv.className = "step-item";
+
+              stepDiv.innerHTML = `
+                        <img src="images/step-${item.id}.jpg" class="step-img" onerror="this.style.display='none'">
+                        <div class="step-text">
+                            <h3 class="step-title">
+                                <span class="step-number">${item.id}</span>
+                                ${item.title}
+                            </h3>
+                            <p class="step-desc">${item.description}</p>
+                        </div>
+                    `;
+              container.appendChild(stepDiv);
+            });
+          });
+        } catch (error) {
+          console.error("خطأ في التحميل:", error);
+        }
+      }
+
+      loadData();
+    </script>
+  </body>
+</html>
